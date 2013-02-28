@@ -2,10 +2,10 @@ package ip.h2n0.main.Level.tiles;
 
 public class AnimatedTile extends BasicTile {
 
-    private int[][] animationTileCoords;
-    private int currentAnimationIndex;
-    private long lastIterationTime;
-    private int animationSwitchDelay;
+    protected int[][] animationTileCoords;
+    protected int currentAnimationIndex;
+    protected long lastIterationTime;
+    protected int animationSwitchDelay;
 
     public AnimatedTile(int id, int[][] animationCoords, int tileColour, int levelColour, int animationSwitchDelay) {
         super(id, animationCoords[0][0], animationCoords[0][1], tileColour, levelColour);

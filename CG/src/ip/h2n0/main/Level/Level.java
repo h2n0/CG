@@ -28,12 +28,13 @@ public class Level {
         if (imagePath != null) {
             this.imagePath = imagePath;
             this.loadLevelFromFile();
-        } else {
-            this.width = 64;
-            this.height = 64;
-            tiles = new byte[width * height];
-            this.generateLevel();
-        }
+        } 
+    }
+    
+    public Level(){
+        this.width = 128;
+        this.height = 128;
+        this.generateLevel(width , height);
     }
 
     private void loadLevelFromFile() {
@@ -76,13 +77,13 @@ public class Level {
         image.setRGB(x, y, newTile.getLevelColour());
     }
 
-    public void generateLevel() {
+    public void generateLevel(int width , int height) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (x * y % 10 < 7) {
-                    tiles[x + y * width] = Tile.Grass.getId();
+                    tiles[x + y * width] = Tile.Water.getId();
                 } else {
-                    tiles[x + y * width] = Tile.Stone.getId();
+                    tiles[x + y * width] = Tile.Lava.getId();
                 }
             }
         }

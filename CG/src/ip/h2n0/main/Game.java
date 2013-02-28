@@ -1,5 +1,7 @@
 package ip.h2n0.main;
 
+import ip.h2n0.main.GFX.Colours;
+import ip.h2n0.main.GFX.Font;
 import ip.h2n0.main.GFX.Screen;
 import ip.h2n0.main.GFX.SpriteSheet;
 import ip.h2n0.main.Level.Level;
@@ -53,13 +55,12 @@ public class Game extends Canvas implements Runnable {
     public GameClient socketClient;
     public GameServer socketServer;
 
-    public String VERSION = "V0.5";
+    public String VERSION = "V0.6";
 
     public boolean debug = true;
     public boolean isApplet = false;
-    public boolean isFullScreen = true;
 
-    public void init() {
+    public void colourInit() {
         game = this;
         int index = 0;
         for (int r = 0; r < 6; r++) {
@@ -73,9 +74,13 @@ public class Game extends Canvas implements Runnable {
                 }
             }
         }
+    }
+
+    public void init() {
         screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/art/SpriteSheet.png"));
         input = new InputHandler(this);
-        level = new Level("/art/levels/Hay.png");
+        level = new Level("/art/levels/FB-Test.png");
+        // level = new Level();
         player = new PlayerMP(level, 100, 100, input, JOptionPane.showInputDialog(this, "Please enter a username"), null, -1);
         level.addEntity(player);
         if (!isApplet) {
@@ -95,7 +100,7 @@ public class Game extends Canvas implements Runnable {
                 socketServer = new GameServer(this);
                 socketServer.start();
             }
-            socketClient = new GameClient(this, JOptionPane.showInputDialog(this , "IP :"));
+            socketClient = new GameClient(this, JOptionPane.showInputDialog(this, "IP :"));
             socketClient.start();
         }
     }
@@ -122,6 +127,7 @@ public class Game extends Canvas implements Runnable {
         long lastTimer = System.currentTimeMillis();
         double delta = 0;
 
+        colourInit();
         init();
 
         while (running) {
@@ -158,6 +164,9 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void tick() {
+        if(!hasFocus()){
+            input.releaseAll();
+        }
         tickCount++;
         level.tick();
     }
@@ -166,12 +175,17 @@ public class Game extends Canvas implements Runnable {
         BufferStrategy bs = getBufferStrategy();
         if (bs == null) {
             createBufferStrategy(3);
+            requestFocus();
             return;
         }
         int xOffset = player.x - (screen.width / 2);
         int yOffset = player.y - (screen.height / 2);
         level.renderTiles(screen, xOffset, yOffset);
         level.renderEntities(screen);
+        Font.renderFrame(screen, "Time : " + tickCount / 60, 1, 3, 18, 9);
+        if (!hasFocus()) {
+            renderFocusNagger();
+        }
         for (int y = 0; y < screen.height; y++) {
             for (int x = 0; x < screen.width; x++) {
                 int colourCode = screen.pixels[x + y * screen.width];
@@ -179,21 +193,38 @@ public class Game extends Canvas implements Runnable {
                     pixels[x + y * WIDTH] = colours[colourCode];
             }
         }
-
         Graphics g = bs.getDrawGraphics();
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
         g.dispose();
         bs.show();
     }
 
-    public void sleep(int seconds) {
-        try {
-            Thread.sleep(seconds * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private void renderFocusNagger() {
+        String msg = "Focus...";
+        int xx = (WIDTH - msg.length() * 8) / 2;
+        int yy = (HEIGHT - 8) / 2;
+        int w = msg.length();
+        int h = 1;
+
+        screen.render(xx - 8, yy - 8, 0 + 13 * 32, Colours.get(-1, 1, 5, 445), 0 , 1);
+        screen.render(xx + w * 8, yy - 8, 0 + 13 * 32, Colours.get(-1, 1, 5, 445), 1 , 1);
+        screen.render(xx - 8, yy + 8, 0 + 13 * 32, Colours.get(-1, 1, 5, 445), 2 , 1);
+        screen.render(xx + w * 8, yy + 8, 0 + 13 * 32, Colours.get(-1, 1, 5, 445), 3 , 1);
+        for (int x = 0; x < w; x++) {
+            screen.render(xx + x * 8, yy - 8, 1 + 13 * 32, Colours.get(-1, 1, 5, 445), 0 , 1);
+            screen.render(xx + x * 8, yy + 8, 1 + 13 * 32, Colours.get(-1, 1, 5, 445), 2 , 1);
+        }
+        for (int y = 0; y < h; y++) {
+            screen.render(xx - 8, yy + y * 8, 2 + 13 * 32, Colours.get(-1, 1, 5, 445), 0 , 1);
+            screen.render(xx + w * 8, yy + y * 8, 2 + 13 * 32, Colours.get(-1, 1, 5, 445), 1 , 1);
+        }
+
+        if ((tickCount / 20) % 2 == 0) {
+            Font.render(msg, screen, xx, yy, Colours.get(5, 333, 333, 333));
+        } else {
+            Font.render(msg, screen, xx, yy, Colours.get(5, 555, 555, 555));
         }
     }
-
     public void debug(DebugLevel level, String msg) {
         switch (level) {
         default:

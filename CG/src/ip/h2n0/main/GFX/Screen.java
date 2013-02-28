@@ -81,6 +81,6 @@ public class Screen {
     }
 
     public void drawCenteredString(String msg, int x, int y, int colour) {
-        Font.render(msg, this, x - msg.length() / 2, y, Colours.get(-1, -1, -1, colour), 1);
+        Font.render(msg, this, x - msg.length() / 2, y, Colours.get(-1, -1, -1, colour));
     }
 }
