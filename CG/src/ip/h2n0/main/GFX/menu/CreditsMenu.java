@@ -8,6 +8,7 @@ public class CreditsMenu extends Menu {
 
     private int animTime = 0;
     private int num = 0;
+    private int colour = 000;
 
     public CreditsMenu(Menu parent) {
         super();
@@ -18,13 +19,6 @@ public class CreditsMenu extends Menu {
     @Override
     public void tick() {
         animTime++;
-        if (input.esc.isPressed()) {
-            game.setMenu(parent);
-        }
-    }
-
-    public void render(Screen screen) {
-        int colour = 000;
         if (animTime % 360 < 30) {
             colour = 000;
         } else if (animTime % 360 >= 30 && animTime % 360 < 45) {
@@ -47,13 +41,15 @@ public class CreditsMenu extends Menu {
             colour = 111;
         } else if (animTime % 360 >= 240 && animTime % 360 < 359) {
             colour = 000;
-        } else {
-            if (num >= 3) {
-                num = 0;
-            } else {
-                num++;
-            }
+        } else if (animTime % 360 == 359) {
+            plusNum();
         }
+        if (input.esc.isPressed()) {
+            game.setMenu(parent);
+        }
+    }
+
+    public void render(Screen screen) {
         screen.set(0);
         String msg = options[num];
         if (num == 0) {
@@ -65,5 +61,13 @@ public class CreditsMenu extends Menu {
         } else if (num == 3) {
             Font.render(msg, screen, 77, 97, Colours.get(-1, -1, -1, colour));
         }
+    }
+
+    private void plusNum() {
+        if (num >= 3) {
+            num = 0;
+            return;
+        }
+        num++;
     }
 }

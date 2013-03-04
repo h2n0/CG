@@ -54,7 +54,7 @@ public class Game extends Canvas implements Runnable {
     public GameClient socketClient;
     public GameServer socketServer;
 
-    public static String VERSION = "V0.6";
+    public static String VERSION = "V0.6.1";
 
     public boolean debug = true;
     public boolean isApplet = false;
@@ -94,12 +94,12 @@ public class Game extends Canvas implements Runnable {
     public void startServer() {
         socketServer = new GameServer(this);
         socketServer.start();
-        socketClient = new GameClient(this, JOptionPane.showInputDialog(this, "localhost"));
+        socketClient = new GameClient(this, "localhost");
         socketClient.start();
     }
 
     public void join() {
-        socketClient = new GameClient(this, JOptionPane.showInputDialog(this, "localhost"));
+        socketClient = new GameClient(this, JOptionPane.showInputDialog(this, "IP to join: "));
         socketClient.start();
     }
 

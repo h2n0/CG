@@ -24,7 +24,6 @@ public class IntroMenu extends Menu {
         } else {
             animTime++;
         }
-        System.out.println(animTime);
     }
 
     @Override
