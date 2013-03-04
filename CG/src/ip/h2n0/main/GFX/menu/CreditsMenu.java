@@ -64,7 +64,7 @@ public class CreditsMenu extends Menu {
     }
 
     private void plusNum() {
-        if (num >= 3) {
+        if (num >= options.length-1) {
             num = 0;
             return;
         }
