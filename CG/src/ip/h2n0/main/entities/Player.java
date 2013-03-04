@@ -5,6 +5,7 @@ import ip.h2n0.main.InputHandler;
 import ip.h2n0.main.GFX.Colours;
 import ip.h2n0.main.GFX.Font;
 import ip.h2n0.main.GFX.Screen;
+import ip.h2n0.main.GFX.menu.TitleMenu;
 import ip.h2n0.main.Level.Level;
 import ip.h2n0.main.net.packets.Packet02Move;
 
@@ -12,7 +13,8 @@ public class Player extends Mob {
 
     private InputHandler input;
     public Screen screen;
-    private int colour = Colours.get(-1, 111, 333, 543);
+    public Game game = new Game();
+    private int colour = Colours.get(-1, 111, 235, 543);
     private int scale = 1;
     private int tickCount = 0;
     int walkingSpeed = 4;
@@ -39,6 +41,9 @@ public class Player extends Mob {
             }
             if (input.right.isPressed()) {
                 xa++;
+            }
+            if(input.esc.isPressed()){
+                game.setMenu(new TitleMenu());
             }
             if (input.shift.isPressed()) {
                 this.speed = 2;

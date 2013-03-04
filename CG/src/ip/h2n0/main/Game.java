@@ -1,9 +1,9 @@
 package ip.h2n0.main;
 
-import ip.h2n0.main.GFX.Colours;
-import ip.h2n0.main.GFX.Font;
 import ip.h2n0.main.GFX.Screen;
 import ip.h2n0.main.GFX.SpriteSheet;
+import ip.h2n0.main.GFX.menu.IntroMenu;
+import ip.h2n0.main.GFX.menu.Menu;
 import ip.h2n0.main.Level.Level;
 import ip.h2n0.main.entities.Player;
 import ip.h2n0.main.entities.PlayerMP;
@@ -14,7 +14,6 @@ import ip.h2n0.main.net.packets.Packet00Login;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Menu;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -55,7 +54,7 @@ public class Game extends Canvas implements Runnable {
     public GameClient socketClient;
     public GameServer socketServer;
 
-    public String VERSION = "V0.6";
+    public static String VERSION = "V0.6";
 
     public boolean debug = true;
     public boolean isApplet = false;
@@ -77,6 +76,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void init() {
+        setMenu(new IntroMenu());
         screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/art/SpriteSheet.png"));
         input = new InputHandler(this);
         level = new Level("/art/levels/FB-Test.png");
@@ -89,6 +89,18 @@ public class Game extends Canvas implements Runnable {
                 socketServer.addConnection((PlayerMP) player, loginPacket);
             }
         }
+    }
+
+    public void startServer() {
+        socketServer = new GameServer(this);
+        socketServer.start();
+        socketClient = new GameClient(this, JOptionPane.showInputDialog(this, "localhost"));
+        socketClient.start();
+    }
+
+    public void join() {
+        socketClient = new GameClient(this, JOptionPane.showInputDialog(this, "localhost"));
+        socketClient.start();
     }
 
     public synchronized void start() {
@@ -164,28 +176,32 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void tick() {
-        if(!hasFocus()){
-            input.releaseAll();
-        }
         tickCount++;
-        level.tick();
+        if (menu != null) {
+            menu.tick();
+        } else {
+            level.tick();
+        }
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+        if (menu != null)
+            menu.init(this, input);
     }
 
     public void render() {
         BufferStrategy bs = getBufferStrategy();
         if (bs == null) {
             createBufferStrategy(3);
-            requestFocus();
             return;
         }
         int xOffset = player.x - (screen.width / 2);
         int yOffset = player.y - (screen.height / 2);
         level.renderTiles(screen, xOffset, yOffset);
         level.renderEntities(screen);
-        Font.renderFrame(screen, "Time : " + tickCount / 60, 1, 3, 18, 9);
-        if (!hasFocus()) {
-            renderFocusNagger();
-        }
+        renderGUI();
+        // Font.renderFrame(screen, "Time : " + tickCount / 60, 1, 3, 18, 9);
         for (int y = 0; y < screen.height; y++) {
             for (int x = 0; x < screen.width; x++) {
                 int colourCode = screen.pixels[x + y * screen.width];
@@ -199,32 +215,12 @@ public class Game extends Canvas implements Runnable {
         bs.show();
     }
 
-    private void renderFocusNagger() {
-        String msg = "Focus...";
-        int xx = (WIDTH - msg.length() * 8) / 2;
-        int yy = (HEIGHT - 8) / 2;
-        int w = msg.length();
-        int h = 1;
-
-        screen.render(xx - 8, yy - 8, 0 + 13 * 32, Colours.get(-1, 1, 5, 445), 0 , 1);
-        screen.render(xx + w * 8, yy - 8, 0 + 13 * 32, Colours.get(-1, 1, 5, 445), 1 , 1);
-        screen.render(xx - 8, yy + 8, 0 + 13 * 32, Colours.get(-1, 1, 5, 445), 2 , 1);
-        screen.render(xx + w * 8, yy + 8, 0 + 13 * 32, Colours.get(-1, 1, 5, 445), 3 , 1);
-        for (int x = 0; x < w; x++) {
-            screen.render(xx + x * 8, yy - 8, 1 + 13 * 32, Colours.get(-1, 1, 5, 445), 0 , 1);
-            screen.render(xx + x * 8, yy + 8, 1 + 13 * 32, Colours.get(-1, 1, 5, 445), 2 , 1);
-        }
-        for (int y = 0; y < h; y++) {
-            screen.render(xx - 8, yy + y * 8, 2 + 13 * 32, Colours.get(-1, 1, 5, 445), 0 , 1);
-            screen.render(xx + w * 8, yy + y * 8, 2 + 13 * 32, Colours.get(-1, 1, 5, 445), 1 , 1);
-        }
-
-        if ((tickCount / 20) % 2 == 0) {
-            Font.render(msg, screen, xx, yy, Colours.get(5, 333, 333, 333));
-        } else {
-            Font.render(msg, screen, xx, yy, Colours.get(5, 555, 555, 555));
+    public void renderGUI() {
+        if (menu != null) {
+            menu.render(screen);
         }
     }
+
     public void debug(DebugLevel level, String msg) {
         switch (level) {
         default:

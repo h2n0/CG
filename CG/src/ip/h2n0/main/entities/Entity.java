@@ -9,7 +9,7 @@ public abstract class Entity {
     protected Level level;
     public boolean removed;
 
-    public Entity(Level level) {
+    public Entity() {
         init(level);
     }
 
@@ -17,7 +17,7 @@ public abstract class Entity {
         this.level = level;
     }
 
-    public void removed() {
+    public void remove() {
         removed = true;
     }
 

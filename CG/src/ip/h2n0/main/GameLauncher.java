@@ -37,17 +37,18 @@ public class GameLauncher extends Applet {
     }
 
     public static void main(String[] args) {
+        game.frame = new JFrame(Game.NAME);
         Image icon = null;
-        try {
-            icon = ImageIO.read(Game.class.getResourceAsStream("/art/Icon.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!game.isApplet) {
+            try {
+                icon = ImageIO.read(Game.class.getResourceAsStream("/art/Icon.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         game.setMinimumSize(Game.DIMENSIONS);
         game.setMaximumSize(Game.DIMENSIONS);
         game.setPreferredSize(Game.DIMENSIONS);
-
-        game.frame = new JFrame(Game.NAME);
 
         game.frame.setIconImage(icon);
         game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

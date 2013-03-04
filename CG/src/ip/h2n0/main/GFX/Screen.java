@@ -1,13 +1,12 @@
 package ip.h2n0.main.GFX;
 
-
 public class Screen {
 
-    public static final int MAP_WIDTH = 64;
-    public static final int MAP_WIDTH_MASK = MAP_WIDTH - 1;
+    public final int MAP_WIDTH = 64;
+    public final int MAP_WIDTH_MASK = MAP_WIDTH - 1;
 
-    public static final byte BIT_MIRROR_X = 0x01;
-    public static final byte BIT_MIRROR_Y = 0x02;
+    public final byte BIT_MIRROR_X = 0x01;
+    public final byte BIT_MIRROR_Y = 0x02;
 
     public int[] pixels;
 
@@ -75,12 +74,14 @@ public class Screen {
         }
     }
 
+    public void set(int c) {
+        for (int i = 0; i < pixels.length; i++) {
+            pixels[i] = c;
+        }
+    }
+
     public void setOffset(int xOffset, int yOffset) {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
-    }
-
-    public void drawCenteredString(String msg, int x, int y, int colour) {
-        Font.render(msg, this, x - msg.length() / 2, y, Colours.get(-1, -1, -1, colour));
     }
 }
