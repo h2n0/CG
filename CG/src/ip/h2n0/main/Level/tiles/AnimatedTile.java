@@ -1,5 +1,7 @@
 package ip.h2n0.main.Level.tiles;
 
+import ip.h2n0.main.Level.Level;
+
 public class AnimatedTile extends BasicTile {
 
     protected int[][] animationTileCoords;
@@ -15,7 +17,8 @@ public class AnimatedTile extends BasicTile {
         this.animationSwitchDelay = animationSwitchDelay;
     }
 
-    public void tick() {
+    @Override
+    public void tick(Level level , int x , int y) {
         if ((System.currentTimeMillis() - lastIterationTime) >= (animationSwitchDelay)) {
             lastIterationTime = System.currentTimeMillis();
             currentAnimationIndex = (currentAnimationIndex + 1) % animationTileCoords.length;

@@ -1,6 +1,5 @@
 package ip.h2n0.main.GFX.menu;
 
-import ip.h2n0.main.Game;
 import ip.h2n0.main.GFX.Colours;
 import ip.h2n0.main.GFX.Font;
 import ip.h2n0.main.GFX.Screen;
@@ -9,7 +8,7 @@ public class TitleMenu extends Menu {
 
     public TitleMenu() {
         super();
-        options = new String[] { "Play", "Help", "About", "Credits", "update" };
+        options = new String[] { "Play", "Help", "About","Credits", "Exit"};
     }
 
     @Override
@@ -40,7 +39,7 @@ public class TitleMenu extends Menu {
                     game.setMenu(new CreditsMenu(this));
                     break;
                 case 4:
-                    game.setMenu(new UpdateMenu(this));
+                    System.exit(3);
                     break;
                 }
             }
@@ -51,15 +50,14 @@ public class TitleMenu extends Menu {
     public void render(Screen screen) {
         screen.set(0);
         for (int i = 0; i < options.length; i++) {
-            int colour = 222;
             String msg = options[i];
+            colour = 333;
             if (i == selected) {
-                msg = "> " + msg + " <";
                 colour = 555;
+                msg = msg + " <";
+                Font.render(msg, screen, 20 - msg.length(), 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333)); 
             }
             Font.render(msg, screen, 20 - msg.length(), 40 + (20 * i), Colours.get(-1, -1, -1, colour));
         }
-        Font.render(Game.VERSION, screen, 10, 155, Colours.get(-1, -1, -1, 222));
-
     }
 }

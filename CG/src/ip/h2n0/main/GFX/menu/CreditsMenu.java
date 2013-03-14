@@ -13,7 +13,7 @@ public class CreditsMenu extends Menu {
     public CreditsMenu(Menu parent) {
         super();
         this.parent = parent;
-        options = new String[] { "C   G", "Elliot Lee-Cerrino", "Jake Bull", "Hayden Lee-Smith" };
+        options = new String[] { "C   G", "Elliot Lee-Cerrino", "Jake Bull", "Hayden Lee-Smith"};
     }
 
     @Override
@@ -60,7 +60,11 @@ public class CreditsMenu extends Menu {
             Font.render(msg, screen, 110, 97, Colours.get(-1, -1, -1, colour));
         } else if (num == 3) {
             Font.render(msg, screen, 77, 97, Colours.get(-1, -1, -1, colour));
+        }else{
+            Font.render(msg, screen, 100, 100, Colours.get(-1, -1, -1, colour));
         }
+        
+        Font.render("Press \"ESC\" to leave",screen,66,160,Colours.get(-1, -1, -1, 111));
     }
 
     private void plusNum() {

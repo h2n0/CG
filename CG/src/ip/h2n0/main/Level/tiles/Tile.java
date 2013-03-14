@@ -8,16 +8,21 @@ public abstract class Tile {
 
     public static final Tile[] tiles = new Tile[256];
     public static final Tile Void = new BasicSolidTile(0, 0, 0, Colours.get(000, -1, -1, -1), 0xFF000000);
-    public static final Tile Stone = new BasicSolidTile(1, 1, 0, Colours.get(-1, 333, -1, -1), 0xFF555555);
+    public static final Tile Stone = new StoneTile(1, 1, 0, Colours.get(-1, 333, -1, -1), 0xFF555555);
     public static final Tile Grass = new BasicTile(2, 2, 0, Colours.get(-1, 131, 141, -1), 0xFF00FF00);
-    public static final Tile Water = new AnimatedTile(3, new int[][] { { 0, 4 }, { 1, 4 }, { 2, 4 }, { 1, 4 } }, Colours.get(-1, 004, 115, -1), 0xFF0000FF, 750);
-    public static final Tile Lava = new AnimatedlavaTile(4, new int[][] { { 0, 5 }, { 1, 5 }, { 2, 5 }, { 1, 5 } }, Colours.get(-1, 530, 400, -1), 0xFFFF5933, 1250);
+    public static final Tile Water = new WaterTile(3, new int[][] { { 0, 4 }, { 1, 4 }, { 2, 4 }, { 1, 4 } }, Colours.get(-1, 004, 115, -1), 0xFF0000FF, 750);
+    public static final Tile Lava = new LavaTile(4, new int[][] { { 0, 5 }, { 1, 5 }, { 2, 5 }, { 1, 5 } }, Colours.get(-1, 530, 400, -1), 0xFFFF5933, 1250);
+    public static final Tile FarmLand = new FarmTile(5, 3, 1, Colours.get(123, 440, 555, 111), 0xFFA54200, 100);
 
     protected byte id;
     protected boolean solid;
     protected boolean emitter;
     private int levelColour;
     protected int x, y;
+
+    protected boolean connectsToLava = false;
+    protected boolean connectsToWater = false;
+    protected boolean connectsToStone = false;
 
     public Tile(int id, boolean isSolid, boolean isEmitter, int levelColour) {
         this.id = (byte) id;
@@ -53,7 +58,11 @@ public abstract class Tile {
         return y;
     }
 
-    public abstract void tick();
+    public boolean connectsToLiquid() {
+        return connectsToWater || connectsToLava;
+    }
+
+    public abstract void tick(Level level, int x, int y);
 
     public abstract void render(Screen screen, Level level, int x, int y);
 }

@@ -8,14 +8,14 @@ import ip.h2n0.main.entities.particles.TextParticle;
 public abstract class Mob extends Entity {
 
     protected String name;
-    protected int speed;
+    protected double speed;
     protected int numSteps = 0;
     protected boolean isMoving;
     protected int movingDir = 1;
     protected int scale = 1;
     public int tickTime = 0;
 
-    public Mob(Level level, String name, int x, int y, int speed) {
+    public Mob(Level level, String name, int x, int y, double speed) {
         this.name = name;
         this.x = x;
         this.y = y;
@@ -25,9 +25,8 @@ public abstract class Mob extends Entity {
     @Override
     public void tick() {
         tickTime++;
-        if (level.getTile(x >> 3, y >> 3) == Tile.Lava) {
+        if (level.getTile(x, y) == Tile.Lava) {
             System.out.println("LAVA HURT");
-            hurt(this, 4, dir ^ 1);
         }
     }
 
@@ -77,7 +76,7 @@ public abstract class Mob extends Entity {
     }
 
     public void doHurt(int dmg, int dir) {
-        level.addEntity(new TextParticle("" + dmg, x, y, Colours.get(-1, -1, -1, 550)));
+        level.addEntity(new TextParticle("" + dmg, x, y, Colours.get(-1, -1, -1, 555)));
     }
 
     protected boolean isSwimming() {

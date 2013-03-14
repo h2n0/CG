@@ -14,7 +14,7 @@ public class TextParticle extends Particle {
     private int x1, y1, z1;
     private double x2, y2, z2;
 
-    public Random r;
+    public Random r = new Random();
 
     public TextParticle(String msg, int x, int y, int colour) {
         this.msg = msg;

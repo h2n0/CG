@@ -29,6 +29,7 @@ public class Game extends Canvas implements Runnable {
     public static final int HEIGHT = 150;
     public static final int SCALE = 3;
     public static final String NAME = "CG";
+    public static String VERSION = "V0.6.3";
     public static final Dimension DIMENSIONS = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
     public JFrame frame;
 
@@ -53,8 +54,6 @@ public class Game extends Canvas implements Runnable {
 
     public GameClient socketClient;
     public GameServer socketServer;
-
-    public static String VERSION = "V0.6.1";
 
     public boolean debug = true;
     public boolean isApplet = false;
@@ -81,7 +80,7 @@ public class Game extends Canvas implements Runnable {
         input = new InputHandler(this);
         level = new Level("/art/levels/FB-Test.png");
         // level = new Level();
-        player = new PlayerMP(level, 100, 100, input, JOptionPane.showInputDialog(this, "Please enter a username"), null, -1);
+        player = new PlayerMP(this, level, 100, 100, input, JOptionPane.showInputDialog(this, "Please enter a username"), null, -1);
         level.addEntity(player);
         if (!isApplet) {
             Packet00Login loginPacket = new Packet00Login(player.getUsername(), player.x, player.y);
@@ -106,7 +105,6 @@ public class Game extends Canvas implements Runnable {
     public synchronized void start() {
         running = true;
         thread = new Thread(this, NAME + "_Game");
-        thread.start();
         if (!isApplet) {
             if (JOptionPane.showConfirmDialog(this, "Do you want to run the server") == 0) {
                 socketServer = new GameServer(this);
@@ -115,6 +113,7 @@ public class Game extends Canvas implements Runnable {
             socketClient = new GameClient(this, JOptionPane.showInputDialog(this, "IP :"));
             socketClient.start();
         }
+        thread.start();
     }
 
     public synchronized void stop() {
@@ -201,7 +200,6 @@ public class Game extends Canvas implements Runnable {
         level.renderTiles(screen, xOffset, yOffset);
         level.renderEntities(screen);
         renderGUI();
-        // Font.renderFrame(screen, "Time : " + tickCount / 60, 1, 3, 18, 9);
         for (int y = 0; y < screen.height; y++) {
             for (int x = 0; x < screen.width; x++) {
                 int colourCode = screen.pixels[x + y * screen.width];

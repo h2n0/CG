@@ -16,7 +16,7 @@ public class BasicTile extends Tile {
         this.y = y;
     }
 
-    public void tick() {
+    public void tick(Level level, int x, int y) {
     }
 
     public void render(Screen screen, Level level, int x, int y) {

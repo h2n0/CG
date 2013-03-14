@@ -5,30 +5,46 @@ import ip.h2n0.main.InputHandler;
 import ip.h2n0.main.GFX.Colours;
 import ip.h2n0.main.GFX.Font;
 import ip.h2n0.main.GFX.Screen;
-import ip.h2n0.main.GFX.menu.TitleMenu;
+import ip.h2n0.main.GFX.menu.PauseMenu;
 import ip.h2n0.main.Level.Level;
+import ip.h2n0.main.Level.tiles.Tile;
 import ip.h2n0.main.net.packets.Packet02Move;
+
+import java.util.Random;
 
 public class Player extends Mob {
 
     private InputHandler input;
+    private Game game;
     public Screen screen;
-    public Game game = new Game();
-    private int colour = Colours.get(-1, 111, 235, 543);
+    Random r = new Random();
+    private int colourB;
+    private int colour;
     private int scale = 1;
     private int tickCount = 0;
     int walkingSpeed = 4;
     private String username;
 
-    public Player(Level level, int x, int y, InputHandler input, String username) {
-        super(level, "Player", x, y, 1);
+    private int inputDelay = 10;
+
+    public Player(Game game, Level level, int x, int y, InputHandler input, String username) {
+        super(level, "Player", x, y, 0.8);
         this.input = input;
         this.username = username;
+        this.game = game;
     }
 
     public void tick() {
+        colourB = r.nextInt(555);
+        if (colourB - 333 < 111) {
+            colourB = r.nextInt(555);
+        }
+        colour = Colours.get(-1, 111, colourB, 543);
         int xa = 0;
         int ya = 0;
+        if (inputDelay > 0) {
+            inputDelay--;
+        }
         if (input != null) {
             if (input.up.isPressed()) {
                 ya--;
@@ -42,8 +58,12 @@ public class Player extends Mob {
             if (input.right.isPressed()) {
                 xa++;
             }
-            if(input.esc.isPressed()){
-                game.setMenu(new TitleMenu());
+            if (input.esc.isPressed() && inputDelay == 0) {
+                game.setMenu(new PauseMenu(this));
+                inputDelay = 10;
+            }
+            if (input.enter.isPressed() && inputDelay == 0) {
+                level.alterTile(x >> 3, y >> 3, Tile.FarmLand);
             }
             if (input.shift.isPressed()) {
                 this.speed = 2;
@@ -56,8 +76,10 @@ public class Player extends Mob {
         if (xa != 0 || ya != 0) {
             move(xa, ya);
             isMoving = true;
-            Packet02Move packet = new Packet02Move(this.getUsername(), this.x, this.y, this.numSteps, this.isMoving, this.movingDir);
-            packet.writeData(Game.game.socketClient);
+            if (!game.isApplet) {
+                Packet02Move packet = new Packet02Move(this.getUsername(), this.x, this.y, this.numSteps, this.isMoving, this.movingDir);
+                packet.writeData(Game.game.socketClient);
+            }
         } else {
             isMoving = false;
         }
@@ -66,7 +88,7 @@ public class Player extends Mob {
 
     public void render(Screen screen) {
         int xTile = 0;
-        int yTile = 28;
+        int yTile = 27;
         int flipTop = (numSteps >> walkingSpeed) & 1;
         int flipBottom = (numSteps >> walkingSpeed) & 1;
 
@@ -94,8 +116,8 @@ public class Player extends Mob {
                 yOffset -= 1;
                 waterColour = Colours.get(-1, 225, 115, -1);
             }
-            screen.render(xOffset, yOffset + 3, 0 + 27 * 32, waterColour, 0x00, 1);
-            screen.render(xOffset + 8, yOffset + 3, 0 + 27 * 32, waterColour, 0x01, 1);
+            screen.render(xOffset, yOffset + 3, 0 + 26 * 32, waterColour, 0x00, 1);
+            screen.render(xOffset + 8, yOffset + 3, 0 + 26 * 32, waterColour, 0x01, 1);
         }
         screen.render(xOffset + (modifier * flipTop), yOffset, xTile + yTile * 32, colour, flipTop, scale);
         screen.render(xOffset + modifier - (modifier * flipTop), yOffset, (xTile + 1) + yTile * 32, colour, flipTop, scale);

@@ -19,7 +19,7 @@ public class Level {
     private byte[] tiles;
     public int width;
     public int height;
-    private List<Entity> entities = new ArrayList<Entity>();
+    public List<Entity> entities = new ArrayList<Entity>();
     private String imagePath;
     private BufferedImage image;
     Player player;
@@ -28,13 +28,13 @@ public class Level {
         if (imagePath != null) {
             this.imagePath = imagePath;
             this.loadLevelFromFile();
-        } 
+        }
     }
-    
-    public Level(){
+
+    public Level() {
         this.width = 128;
         this.height = 128;
-        this.generateLevel(width , height);
+        this.generateLevel(width, height);
     }
 
     private void loadLevelFromFile() {
@@ -77,7 +77,7 @@ public class Level {
         image.setRGB(x, y, newTile.getLevelColour());
     }
 
-    public void generateLevel(int width , int height) {
+    public void generateLevel(int width, int height) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (x * y % 10 < 7) {
@@ -94,10 +94,7 @@ public class Level {
     }
 
     public void tick() {
-        if (player != null) {
-            gameCheck();
-        }
-        for (Entity e : entities) {
+        for (Entity e : getEntitys()) {
             e.tick();
         }
 
@@ -105,7 +102,7 @@ public class Level {
             if (t == null) {
                 break;
             }
-            t.tick();
+            t.tick(this, t.getX(), t.getY());
         }
     }
 
@@ -140,13 +137,13 @@ public class Level {
         return Tile.tiles[tiles[x + y * width]];
     }
 
-    public void addEntity(Entity entity) {
-        if (entity instanceof Player) {
-            player = (Player) entity;
+    public void addEntity(Entity e) {
+        if (e instanceof Player) {
+            player = (Player) e;
         }
-        entity.removed = false;
-        entities.add(entity);
-        entity.init(this);
+        e.removed = false;
+        getEntitys().add(e);
+        e.init(this);
     }
 
     public void removePlayerMP(String username) {
@@ -160,15 +157,9 @@ public class Level {
         this.entities.remove(index);
     }
 
-    private void gameCheck() {
-        if (player.removed) {
-            System.out.print(true);
-        }
-    }
-
     private int getPlayerMPIndex(String username) {
         int index = 0;
-        for (Entity e : entities) {
+        for (Entity e : getEntitys()) {
             if (e instanceof PlayerMP && ((PlayerMP) e).getUsername().equals(username)) {
                 break;
             }
@@ -177,7 +168,7 @@ public class Level {
         return index;
     }
 
-    public void movePlayer(String username, int x, int y , int numSteps , boolean isMoving , int movingDir) {
+    public void movePlayer(String username, int x, int y, int numSteps, boolean isMoving, int movingDir) {
         int index = getPlayerMPIndex(username);
         PlayerMP player = (PlayerMP) this.getEntitys().get(index);
         player.x = x;

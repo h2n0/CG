@@ -6,6 +6,8 @@ import ip.h2n0.main.GFX.Colours;
 import ip.h2n0.main.GFX.Font;
 import ip.h2n0.main.GFX.Screen;
 
+import java.util.Random;
+
 public abstract class Menu {
     protected Game game;
     protected InputHandler input;
@@ -13,6 +15,8 @@ public abstract class Menu {
     protected int selected = 0;
     protected int waitTime = 10;
     protected int selectTime = 10;
+    protected int colour = 0;
+    protected static Random r = new Random();
     protected String[] options = new String[0];
     protected String version = Game.VERSION;
 
@@ -33,6 +37,14 @@ public abstract class Menu {
         }
     }
 
+    public int newColour() {
+        colour = r.nextInt(555);
+        if (colour - 333 < 111) {
+            newColour();
+        }
+        return colour;
+    }
+
     /**
      * Count all of the menu time variable down to 0
      */
@@ -42,8 +54,12 @@ public abstract class Menu {
         if (selectTime > 0) {
             selectTime--;
         }
+        scrollCheck();
+    }
+
+    public void scrollCheck() {
         if (selected < 0) {
-            selected += options.length;
+            selected = options.length - 1;
         }
         if (selected >= options.length) {
             selected = 0;
