@@ -56,8 +56,9 @@ public class MultiTypeMenu extends Menu {
             int colour = 222;
             String msg = options[i];
             if (i == selected) {
-                msg = "> " + msg + " <";
+                msg = msg + " <";
                 colour = 555;
+                Font.render(msg, screen, 20 - msg.length(), 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333));
             }
             Font.render(msg, screen, 20 - msg.length(), 40 + (20 * i), Colours.get(-1, -1, -1, colour));
         }

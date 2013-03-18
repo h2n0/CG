@@ -8,7 +8,7 @@ public class TitleMenu extends Menu {
 
     public TitleMenu() {
         super();
-        options = new String[] { "Play", "Help", "About","Credits", "Exit"};
+        options = new String[] { "Play", "Help", "About", "Credits", "Exit" };
     }
 
     @Override
@@ -55,7 +55,7 @@ public class TitleMenu extends Menu {
             if (i == selected) {
                 colour = 555;
                 msg = msg + " <";
-                Font.render(msg, screen, 20 - msg.length(), 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333)); 
+                Font.render(msg, screen, 20 - msg.length(), 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333));
             }
             Font.render(msg, screen, 20 - msg.length(), 40 + (20 * i), Colours.get(-1, -1, -1, colour));
         }

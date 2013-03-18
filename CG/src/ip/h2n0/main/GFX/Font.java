@@ -3,9 +3,10 @@ package ip.h2n0.main.GFX;
 
 public class Font {
 
-    private static String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ      " +"abcdefghijklmnopqrstuvwxyz      "+ "0123456789.,!?'\"-+=/\\%()<>:;    ";
+    private static String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ      " + "abcdefghijklmnopqrstuvwxyz      " + "0123456789.,!?'\"-+=/\\%()<>:;_   ";
 
     public static void render(String msg, Screen screen, int x, int y, int colour) {
+        msg = msg.toUpperCase();
         for (int i = 0; i < msg.length(); i++) {
             int charIndex = chars.indexOf(msg.charAt(i));
             if (charIndex >= 0)
@@ -14,6 +15,7 @@ public class Font {
     }
 
     public static void renderScale(String msg, Screen screen, int x, int y, int scale, int colour) {
+        msg = msg.toUpperCase();
         for (int i = 0; i < msg.length(); i++) {
             int charIndex = chars.indexOf(msg.charAt(i));
             if (charIndex >= 0)

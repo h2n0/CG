@@ -6,7 +6,6 @@ import ip.h2n0.main.GFX.Screen;
 
 public class GameTypeMenu extends Menu {
 
-
     public GameTypeMenu(Menu parent) {
         super();
         this.parent = parent;
@@ -53,8 +52,9 @@ public class GameTypeMenu extends Menu {
             int colour = 222;
             String msg = options[i];
             if (i == selected) {
-                msg = "> " + msg + " <";
                 colour = 555;
+                msg = msg + " <";
+                Font.render(msg, screen, 20 - msg.length(), 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333));
             }
             Font.render(msg, screen, 20 - msg.length(), 40 + (20 * i), Colours.get(-1, -1, -1, colour));
         }

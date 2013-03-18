@@ -24,11 +24,12 @@ public class Player extends Mob {
     private int tickCount = 0;
     int walkingSpeed = 4;
     private String username;
+    public int coin = 0;
 
     private int inputDelay = 10;
 
     public Player(Game game, Level level, int x, int y, InputHandler input, String username) {
-        super(level, "Player", x, y, 0.8);
+        super(level, "Player", x, y, 0.1);
         this.input = input;
         this.username = username;
         this.game = game;
@@ -39,12 +40,12 @@ public class Player extends Mob {
         if (colourB - 333 < 111) {
             colourB = r.nextInt(555);
         }
-        colour = Colours.get(-1, 111, colourB, 543);
-        int xa = 0;
-        int ya = 0;
+        colour = Colours.get(-1, 111, 131, 543);
         if (inputDelay > 0) {
             inputDelay--;
         }
+        int xa = 0;
+        int ya = 0;
         if (input != null) {
             if (input.up.isPressed()) {
                 ya--;

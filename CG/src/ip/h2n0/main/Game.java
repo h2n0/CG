@@ -27,9 +27,9 @@ public class Game extends Canvas implements Runnable {
 
     public static final int WIDTH = 280;
     public static final int HEIGHT = 150;
-    public static final int SCALE = 3;
+    public static final int SCALE = 1;
     public static final String NAME = "CG";
-    public static String VERSION = "V0.6.3";
+    public static String VERSION = "V-0.6.3_1";
     public static final Dimension DIMENSIONS = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
     public JFrame frame;
 
@@ -59,7 +59,6 @@ public class Game extends Canvas implements Runnable {
     public boolean isApplet = false;
 
     public void colourInit() {
-        game = this;
         int index = 0;
         for (int r = 0; r < 6; r++) {
             for (int g = 0; g < 6; g++) {
@@ -75,6 +74,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void init() {
+        game = this;
         setMenu(new IntroMenu());
         screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/art/SpriteSheet.png"));
         input = new InputHandler(this);
@@ -216,6 +216,8 @@ public class Game extends Canvas implements Runnable {
     public void renderGUI() {
         if (menu != null) {
             menu.render(screen);
+        }else{
+          //  Font.renderFrame(screen, "Things", 0, 19, 34, 22);
         }
     }
 
