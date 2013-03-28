@@ -1,21 +1,20 @@
 package ip.h2n0.main.entities;
 
 import ip.h2n0.main.GFX.Colours;
-import ip.h2n0.main.Level.Level;
 import ip.h2n0.main.Level.tiles.Tile;
 import ip.h2n0.main.entities.particles.TextParticle;
 
 public abstract class Mob extends Entity {
 
     protected String name;
-    protected double speed;
+    protected int speed;
     protected int numSteps = 0;
     protected boolean isMoving;
     protected int movingDir = 1;
     protected int scale = 1;
     public int tickTime = 0;
 
-    public Mob(Level level, String name, int x, int y, double speed) {
+    public Mob(String name, int x, int y, int speed) {
         this.name = name;
         this.x = x;
         this.y = y;
@@ -24,10 +23,6 @@ public abstract class Mob extends Entity {
 
     @Override
     public void tick() {
-        tickTime++;
-        if (level.getTile(x, y) == Tile.Lava) {
-            System.out.println("LAVA HURT");
-        }
     }
 
     public void move(int xa, int ya) {

@@ -6,7 +6,6 @@ import ip.h2n0.main.entities.Entity;
 public class Particle extends Entity {
 
     public Particle() {
-
     }
 
     public void render(Screen screen) {

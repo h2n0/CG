@@ -8,6 +8,8 @@ import ip.h2n0.main.GFX.Screen;
 import ip.h2n0.main.GFX.menu.PauseMenu;
 import ip.h2n0.main.Level.Level;
 import ip.h2n0.main.Level.tiles.Tile;
+import ip.h2n0.main.entities.particles.TextParticle;
+import ip.h2n0.main.item.Item;
 import ip.h2n0.main.net.packets.Packet02Move;
 
 import java.util.Random;
@@ -18,29 +20,26 @@ public class Player extends Mob {
     private Game game;
     public Screen screen;
     Random r = new Random();
-    private int colourB;
-    private int colour;
+    private int colour = Colours.get(-1, 111, 131, 543);;
     private int scale = 1;
+    private int stamina;
     private int tickCount = 0;
-    int walkingSpeed = 4;
+    private int walkingSpeed = 4;
     private String username;
-    public int coin = 0;
-
     private int inputDelay = 10;
+    public Item activeItem;
 
     public Player(Game game, Level level, int x, int y, InputHandler input, String username) {
-        super(level, "Player", x, y, 0.1);
+        super("Player", x, y, 1);
         this.input = input;
+        this.level = level;
         this.username = username;
         this.game = game;
+        this.stamina = 5;
+        this.activeItem = null;
     }
 
     public void tick() {
-        colourB = r.nextInt(555);
-        if (colourB - 333 < 111) {
-            colourB = r.nextInt(555);
-        }
-        colour = Colours.get(-1, 111, 131, 543);
         if (inputDelay > 0) {
             inputDelay--;
         }
@@ -66,12 +65,24 @@ public class Player extends Mob {
             if (input.enter.isPressed() && inputDelay == 0) {
                 level.alterTile(x >> 3, y >> 3, Tile.FarmLand);
             }
-            if (input.shift.isPressed()) {
+            if (input.shift.isPressed() && stamina != 0) {
+                if (tickCount % 60 == 59) {
+                    stamina--;
+                }
                 this.speed = 2;
                 this.walkingSpeed = 3;
             } else {
                 this.speed = 1;
                 this.walkingSpeed = 4;
+                if (tickCount % 120 == 119) {
+                    if (stamina >= 5) {
+                        stamina = 5;
+                    } else {
+                        stamina++;
+                        level.getEntities().add(new TextParticle("+1S", x, y, 050));
+                        System.out.println("+1S");
+                    }
+                }
             }
         }
         if (xa != 0 || ya != 0) {

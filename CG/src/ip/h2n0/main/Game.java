@@ -21,15 +21,14 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+@SuppressWarnings("serial")
 public class Game extends Canvas implements Runnable {
-
-    private static final long serialVersionUID = 1L;
 
     public static final int WIDTH = 280;
     public static final int HEIGHT = 150;
-    public static final int SCALE = 1;
+    public static final int SCALE = 3;
     public static final String NAME = "CG";
-    public static String VERSION = "V-0.6.3_1";
+    public static String VERSION = "V0.6.3_1";
     public static final Dimension DIMENSIONS = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
     public JFrame frame;
 
@@ -102,7 +101,7 @@ public class Game extends Canvas implements Runnable {
         socketClient.start();
     }
 
-    public synchronized void start() {
+    public void start() {
         running = true;
         thread = new Thread(this, NAME + "_Game");
         if (!isApplet) {
@@ -116,7 +115,7 @@ public class Game extends Canvas implements Runnable {
         thread.start();
     }
 
-    public synchronized void stop() {
+    public void stop() {
         if (running = false)
             return;
         running = false;
@@ -216,8 +215,8 @@ public class Game extends Canvas implements Runnable {
     public void renderGUI() {
         if (menu != null) {
             menu.render(screen);
-        }else{
-          //  Font.renderFrame(screen, "Things", 0, 19, 34, 22);
+        } else {
+            // Font.renderFrame(screen, "Things", 0, 19, 34, 22);
         }
     }
 

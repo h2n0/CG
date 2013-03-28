@@ -16,7 +16,7 @@ public abstract class Menu {
     protected int waitTime = 10;
     protected int selectTime = 10;
     protected int colour = 0;
-    protected static Random r = new Random();
+    protected Random r = new Random();
     protected String[] options = new String[0];
     protected String version = Game.VERSION;
 

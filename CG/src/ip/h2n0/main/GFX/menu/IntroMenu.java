@@ -1,5 +1,6 @@
 package ip.h2n0.main.GFX.menu;
 
+import ip.h2n0.main.Game;
 import ip.h2n0.main.GFX.Colours;
 import ip.h2n0.main.GFX.Font;
 import ip.h2n0.main.GFX.Screen;
@@ -8,13 +9,11 @@ public class IntroMenu extends Menu {
 
     private int waitTime = 375;
     private int animTime = 0;
-    private int fTime = 0;
+    private boolean ready = false;
+    private int tickCount = 0;
 
     public IntroMenu() {
         super();
-        options = new String[] { "C", "G", version, "press \"Enter\"/\"Return\" to play","(C) Fire Leaf Studios 2013" };
-        fTime = r.nextInt(100);
-        System.out.println(fTime);
     }
 
     @Override
@@ -22,38 +21,48 @@ public class IntroMenu extends Menu {
         while (waitTime > 0) {
             waitTime--;
         }
-        if (input.enter.isPressed() && waitTime == 0) {
-            game.setMenu(new TitleMenu());
-        } else {
-            animTime++;
+        if (ready) {
+            if (input.enter.isPressed() && waitTime == 0) {
+                game.setMenu(new TitleMenu());
+            } else {
+                animTime++;
+            }
         }
+        tickCount++;
     }
 
     @Override
     public void render(Screen screen) {
-        int colour = 333;
-        int fColour = 333;
+        int scale = 2;
         if (animTime % 60 <= 30) {
             colour = 555;
         } else {
             colour = 333;
         }
-        if(fTime <=50 ){
-            fColour = 520;
-        }else{
-            fColour = 542;
+        if (!ready) {
+            if (tickCount % 300 == 299) {
+                ready = true;
+            }
         }
-        screen.set(0);
-        for (int i = 0; i < 2; i++) {
-            String msg = options[i];
-            String version = options[2];
-            String note = options[3];
-            String C = options[4];
-            Font.renderScale(msg, screen, 120 + (i * 35), (35 * i) + 65, 5, Colours.get(-1, -1, -1, 555));
-            Font.render(version, screen, 180, 120, Colours.get(-1, -1, -1, 222));
-            Font.render(note, screen, 23, 145, Colours.get(-1, -1, -1, colour));
-            Font.render(C, screen, 30, 155, Colours.get(-1, -1, -1,fColour));
+        if (ready) {
+            screen.set(0);
+            for (int y = 0; y < 3; y++) {
+                for (int x = 0; x < 9; x++) {
+                    screen.render(30 + (x * 8 * scale), 80 + (y * 8 * scale), (23 + x) + (1 + y) * 32, Colours.get(-1, 121, 153, 245), 0, scale);
 
+                }
+            }
+            Font.render("Press \"Enter\"/\"Return\"to continue", screen, 10, 150, Colours.get(-1, -1, -1, colour));
+            Font.render(Game.VERSION, screen, 40, 115, Colours.get(-1, -1, -1, 222));
+        } else {
+            scale = 4;
+            screen.set(0);
+            for (int y = 0; y < 2; y++) {
+                for (int x = 0; x < 2; x++) {
+                    screen.render(125 + (x * 8 * scale), 80 + (y * 8 * scale), (30 + x) + (4 + y) * 32, Colours.get(-1, 210, 321, 520), 0, scale);
+                }
+            }
+            Font.render("(C) Fire Leaf Studios 2013", screen, 40, 150, Colours.get(-1, -1, -1, 520));
         }
     }
 }

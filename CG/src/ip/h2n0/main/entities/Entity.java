@@ -10,7 +10,6 @@ public abstract class Entity {
     public boolean removed;
 
     public Entity() {
-        init(level);
     }
 
     public final void init(Level level) {
