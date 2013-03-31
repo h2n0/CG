@@ -21,7 +21,7 @@ public class HelpMenu extends Menu {
             helpTime--;
         }
         if (helpPage == 0) {
-            options = new String[] { "Welcome to CG", "", "not much to see here", "but press \"A\"/\"D\" to navigate.","you can also push Left and right","on the keyboard to change","the page"};
+            options = new String[] { "Welcome to CG", "", "not much to see here", "but press \"A\"/\"D\" or the","\"Left\"/\"right\"keys on the keyboard","to change the page"};
         } else if (helpPage == 1) {
             options = new String[] { "How to play!", "", "W - Move up", "A - Move left", "S - Move Down", "D - Move right" };
         } else if (helpPage == 2) {
@@ -34,18 +34,18 @@ public class HelpMenu extends Menu {
         if (input.right.isPressed() && helpTime == 0) {
             if (helpPage == 4) {
                 helpPage = -1;
-                helpTime = 10;
+                helpTime = 15;
             }
             helpPage++;
-            helpTime = 10;
+            helpTime = 15;
         }
         if (input.left.isPressed() && helpTime == 0) {
             if (helpPage == 0) {
                 helpPage = finalPage;
-                helpTime = 10;
+                helpTime = 15;
             }
             helpPage--;
-            helpTime = 10;
+            helpTime = 15;
         }
         if (input.esc.isPressed()) {
             game.setMenu(parent);
@@ -63,7 +63,7 @@ public class HelpMenu extends Menu {
             } else {
                 colour = 333;
             }
-            Font.render(msg, screen, 10, (10 * i) + 40, Colours.get(-1, -1, -1, colour));
+            Font.render(msg, screen, 5, (10 * i) + 40, Colours.get(-1, -1, -1, colour));
         }
         Font.render("(" + (helpPage + 1 )+ "/" + finalPage+")", screen, 10, 150, Colours.get(-1, -1, -1, 444));
         Font.render("Press \"ESC\" to go back", screen, 10, 160, Colours.get(-1, -1, -1, 111));

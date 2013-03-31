@@ -30,7 +30,6 @@ public class Level {
             this.width = 64;
             this.height = 64;
             tiles = new byte[width * height];
-            this.generateLevel();
         }
     }
 
@@ -124,7 +123,9 @@ public class Level {
 
     public void renderEntities(Screen screen) {
         for (Entity e : getEntities()) {
-            e.render(screen);
+            if (!e.removed) {
+                e.render(screen);
+            }
         }
     }
 
@@ -138,7 +139,8 @@ public class Level {
         entity.removed = false;
         getEntities().add(entity);
     }
-    public void removeEntity(Entity entity){
+
+    public void removeEntity(Entity entity) {
         entity.removed = true;
         getEntities().remove(entity);
     }

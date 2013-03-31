@@ -38,7 +38,7 @@ public abstract class Menu {
     }
 
     public int newColour() {
-        colour = r.nextInt(555);
+       colour = r.nextInt(555);
         if (colour - 333 < 111) {
             newColour();
         }
