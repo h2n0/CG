@@ -10,7 +10,7 @@ public class TextParticle extends Particle {
 
     private String msg;
     private int colour;
-    private int lifeTime = 0;
+    private int age = 0;
     private int x1, y1, z1;
     private double x2, y2, z2;
 
@@ -31,8 +31,8 @@ public class TextParticle extends Particle {
 
     @Override
     public void tick() {
-        lifeTime++;
-        if (lifeTime > 60) {
+        age++;
+        if (age > lifeTime) {
             remove();
         }
         x1 += x2;

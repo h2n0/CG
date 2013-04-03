@@ -8,7 +8,6 @@ import ip.h2n0.main.GFX.Screen;
 import ip.h2n0.main.GFX.menu.PauseMenu;
 import ip.h2n0.main.Level.Level;
 import ip.h2n0.main.Level.tiles.Tile;
-import ip.h2n0.main.entities.particles.TextParticle;
 import ip.h2n0.main.item.Item;
 import ip.h2n0.main.net.packets.Packet02Move;
 
@@ -79,7 +78,7 @@ public class Player extends Mob {
                         stamina = 5;
                     } else {
                         stamina++;
-                        level.getEntities().add(new TextParticle("+1S", x, y, 050));
+                  //      level.getEntities().add(new TextParticle("+1S", x, y, 050));
                         System.out.println("+1S");
                     }
                 }

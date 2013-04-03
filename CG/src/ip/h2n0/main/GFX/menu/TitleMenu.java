@@ -66,7 +66,8 @@ public class TitleMenu extends Menu {
                 colour = 555;
                 Font.render(msg, screen, 20 - msg.length(), 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333));
                 for (int x = 0; x < 2; x++) {
-                    screen.render(70 + d + (x * 8), 41 + (20 * i), (26 + x) + 0 * 32, Colours.get(-1, newColour(), newColour(), newColour()), 0, 1);
+                  //  screen.render(70 + d + (x * 8), 41 + (20 * i), (26 + x) + 0 * 32, Colours.get(-1, newColour(), newColour(), newColour()), 0, 1);
+                    screen.render(70 + d + (x * 8),41+(20 * i), 8 + 3 * 32, d, 0, 1);
                 }
             }
             Font.render(msg, screen, 20 - msg.length(), 40 + (20 * i), Colours.get(-1, -1, -1, colour));
