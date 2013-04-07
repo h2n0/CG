@@ -16,6 +16,7 @@ public abstract class Menu {
     protected int waitTime = 10;
     protected int selectTime = 10;
     protected int colour = 0;
+    protected int tick = 0;
     protected Random r = new Random();
     protected String[] options = new String[0];
     protected String version = Game.VERSION;
@@ -64,6 +65,10 @@ public abstract class Menu {
         if (selected >= options.length) {
             selected = 0;
         }
+    }
+    
+    public void renderCursor(Screen screen , int x , int y){
+        screen.render(x, y, 27 + 0 * 32, Colours.get(-1, 222, 444, 555), 0, 1);
     }
 
     /**

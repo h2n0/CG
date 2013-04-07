@@ -5,7 +5,9 @@ import ip.h2n0.main.GFX.Font;
 import ip.h2n0.main.GFX.Screen;
 
 public class MultiTypeMenu extends Menu {
-
+    
+    private int tick = 0;
+    
     public MultiTypeMenu(Menu parent) {
         super();
         this.parent = parent;
@@ -47,6 +49,7 @@ public class MultiTypeMenu extends Menu {
         if (input.esc.isPressed()) {
             game.setMenu(parent);
         }
+        tick++;
     }
 
     @Override
@@ -56,9 +59,11 @@ public class MultiTypeMenu extends Menu {
             int colour = 222;
             String msg = options[i];
             if (i == selected) {
-                msg = msg + " <";
+                int d = 0;
+                if(tick % 45 <= 23) d = 5;
                 colour = 555;
                 Font.render(msg, screen, 20 - msg.length(), 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333));
+                renderCursor(screen , 120 + d,41 + (20 * i));
             }
             Font.render(msg, screen, 20 - msg.length(), 40 + (20 * i), Colours.get(-1, -1, -1, colour));
         }

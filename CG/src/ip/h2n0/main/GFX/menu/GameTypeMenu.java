@@ -52,20 +52,18 @@ public class GameTypeMenu extends Menu {
     @Override
     public void render(Screen screen) {
         screen.set(0);
-        if(m % 45 <= 23){
+        if (m % 45 <= 23) {
             d = 0;
-        }else{
+        } else {
             d = 5;
         }
         for (int i = 0; i < options.length; i++) {
-             colour = 222;
+            colour = 222;
             String msg = options[i];
             if (i == selected) {
                 colour = 555;
                 Font.render(msg, screen, 20 - msg.length(), 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333));
-                for (int x = 0; x < 2; x++) {
-                    screen.render(120 + d + (x * 8), 41 + (20 * i), (26 + x) + 0 * 32, Colours.get(-1, newColour(), newColour(), newColour()), 0, 1);
-                }
+                renderCursor(screen, 120 + d, 41 + (20 * i));
             }
             Font.render(msg, screen, 20 - msg.length(), 40 + (20 * i), Colours.get(-1, -1, -1, colour));
         }
