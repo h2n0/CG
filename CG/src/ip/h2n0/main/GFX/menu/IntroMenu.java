@@ -10,7 +10,6 @@ public class IntroMenu extends Menu {
     private int waitTime = 375;
     private int animTime = 0;
     private boolean ready = false;
-    private int tickCount = 0;
 
     public IntroMenu() {
         super();
@@ -28,7 +27,7 @@ public class IntroMenu extends Menu {
                 animTime++;
             }
         }
-        tickCount++;
+        tick++;
     }
 
     @Override
@@ -40,7 +39,7 @@ public class IntroMenu extends Menu {
             colour = 333;
         }
         if (!ready) {
-            if (tickCount % 300 == 299) {
+            if (tick % 300 == 299) {
                 ready = true;
             }
         }
@@ -52,6 +51,9 @@ public class IntroMenu extends Menu {
 
                 }
             }
+            if(tick > 60 * 10){
+                game.setMenu(new ExpositionMenu(this));
+            }
             Font.render("Press \"Enter\"/\"Return\"to continue", screen, 10, 150, Colours.get(-1, -1, -1, colour));
             Font.render(Game.VERSION, screen, 40, 115, Colours.get(-1, -1, -1, 222));
         } else {
@@ -62,7 +64,7 @@ public class IntroMenu extends Menu {
                     screen.render(125 + (x * 8 * scale), 80 + (y * 8 * scale), (30 + x) + (4 + y) * 32, Colours.get(-1, 210, 321, 520), 0, scale);
                 }
             }
-            Font.render("(C) Fire Leaf Studios 2013", screen, 40, 150, Colours.get(-1, -1, -1, 520));
+            Font.render("(C) Fire Leaf Studios 2013", screen, 38, 150, Colours.get(-1, -1, -1, 520));
         }
     }
 }

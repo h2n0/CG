@@ -13,7 +13,7 @@ public class CreditsMenu extends Menu {
     public CreditsMenu(Menu parent) {
         super();
         this.parent = parent;
-        options = new String[] { "C   G", "Elliot Lee-Cerrino", "Jake Bull", "Hayden Lee-Smith"};
+        options = new String[] { "Insert RPG Here", "A game by", "Elliot Lee-Cerrino", "Jake Bull", "Hayden Lee-Smith" };
     }
 
     @Override
@@ -42,7 +42,8 @@ public class CreditsMenu extends Menu {
         } else if (animTime % 360 >= 240 && animTime % 360 < 359) {
             colour = 000;
         } else if (animTime % 360 == 359) {
-            plusNum();
+            // plusNum();
+            num = 1;
         }
         if (input.esc.isPressed()) {
             game.setMenu(parent);
@@ -53,24 +54,26 @@ public class CreditsMenu extends Menu {
         screen.set(0);
         String msg = options[num];
         if (num == 0) {
-            Font.renderScale(msg, screen, 123, 95, 4, Colours.get(-1, -1, -1, colour));
+            Font.render(msg, screen, 83, 97, Colours.get(-1, -1, -1, colour));
         } else if (num == 1) {
-            Font.render(msg, screen, 70, 97, Colours.get(-1, -1, -1, colour));
+            Font.render(msg, screen, 108, 97, Colours.get(-1, -1, -1, colour));
+            Font.render("Fire Leaf Studios", screen, 80, 107, Colours.get(-1, -1, -1, (520 & colour) * 1));
         } else if (num == 2) {
-            Font.render(msg, screen, 110, 97, Colours.get(-1, -1, -1, colour));
+            Font.render(msg, screen, 74, 97, Colours.get(-1, -1, -1, colour));
         } else if (num == 3) {
+            Font.render(msg, screen, 110, 97, Colours.get(-1, -1, -1, colour));
+        } else if (num == 4) {
             Font.render(msg, screen, 77, 97, Colours.get(-1, -1, -1, colour));
-        }else{
+        } else {
             Font.render(msg, screen, 100, 100, Colours.get(-1, -1, -1, colour));
         }
-        
-        Font.render("Press \"ESC\" to leave",screen,66,160,Colours.get(-1, -1, -1, 111));
+
+        Font.render("Press \"ESC\" to leave", screen, 66, 160, Colours.get(-1, -1, -1, 111));
     }
 
     private void plusNum() {
-        if (num >= options.length-1) {
-            num = 0;
-            return;
+        if (num >= options.length - 1) {
+            game.setMenu(parent);
         }
         num++;
     }

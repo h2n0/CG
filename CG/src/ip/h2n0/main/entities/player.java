@@ -8,12 +8,13 @@ import ip.h2n0.main.GFX.Screen;
 import ip.h2n0.main.GFX.menu.PauseMenu;
 import ip.h2n0.main.Level.Level;
 import ip.h2n0.main.Level.tiles.Tile;
+import ip.h2n0.main.entities.particles.TextParticle;
 import ip.h2n0.main.item.Item;
 import ip.h2n0.main.net.packets.Packet02Move;
 
 import java.util.Random;
 
-public class Player extends Mob {
+public class player extends Mob {
 
     private InputHandler input;
     private Game game;
@@ -22,13 +23,14 @@ public class Player extends Mob {
     private int colour = Colours.get(-1, 111, 131, 543);;
     private int scale = 1;
     private int stamina;
-    private int tickCount = 0;
+    private int ticks = 0;
     private int walkingSpeed = 4;
-    private String username;
+    private static String username;
     private int inputDelay = 10;
     public Item activeItem;
 
-    public Player(Game game, Level level, int x, int y, InputHandler input, String username) {
+    @SuppressWarnings("static-access")
+    public player(Game game, Level level, int x, int y, InputHandler input, String username) {
         super("Player", x, y, 1);
         this.input = input;
         this.level = level;
@@ -62,10 +64,10 @@ public class Player extends Mob {
                 inputDelay = 10;
             }
             if (input.enter.isPressed() && inputDelay == 0) {
-                level.alterTile(x >> 3, y >> 3, Tile.FarmLand);
+                level.alterTile(x, y, Tile.FarmLand);
             }
             if (input.shift.isPressed() && stamina != 0) {
-                if (tickCount % 60 == 59) {
+                if (ticks % 60 == 59) {
                     stamina--;
                 }
                 this.speed = 2;
@@ -73,12 +75,16 @@ public class Player extends Mob {
             } else {
                 this.speed = 1;
                 this.walkingSpeed = 4;
-                if (tickCount % 120 == 119) {
+                if (ticks % 120 == 119) {
                     if (stamina >= 5) {
                         stamina = 5;
                     } else {
                         stamina++;
-                  //      level.getEntities().add(new TextParticle("+1S", x, y, 050));
+                        try {
+                            level.addEntity(new TextParticle("+1S", x, y, 050));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         System.out.println("+1S");
                     }
                 }
@@ -88,13 +94,13 @@ public class Player extends Mob {
             move(xa, ya);
             isMoving = true;
             if (!game.isApplet) {
-                Packet02Move packet = new Packet02Move(this.getUsername(), this.x, this.y, this.numSteps, this.isMoving, this.movingDir);
+                Packet02Move packet = new Packet02Move(getUsername(), this.x, this.y, this.numSteps, this.isMoving, this.movingDir);
                 packet.writeData(Game.game.socketClient);
             }
         } else {
             isMoving = false;
         }
-        tickCount++;
+        ticks++;
     }
 
     public void render(Screen screen) {
@@ -116,12 +122,12 @@ public class Player extends Mob {
         if (isSwimming()) {
             int waterColour;
             yOffset += 4;
-            if (tickCount % 60 < 15) {
+            if (ticks % 60 < 15) {
                 waterColour = Colours.get(-1, -1, 225, -1);
-            } else if (15 <= tickCount % 60 && tickCount % 60 < 30) {
+            } else if (15 <= ticks % 60 && ticks % 60 < 30) {
                 yOffset -= 1;
                 waterColour = Colours.get(-1, 225, 115, -1);
-            } else if (30 <= tickCount % 60 && tickCount % 60 < 45) {
+            } else if (30 <= ticks % 60 && ticks % 60 < 45) {
                 waterColour = Colours.get(-1, 335, -1, 225);
             } else {
                 yOffset -= 1;
@@ -171,6 +177,10 @@ public class Player extends Mob {
     }
 
     public String getUsername() {
+        return username;
+    }
+
+    public static String getUsernameO() {
         return username;
     }
 }

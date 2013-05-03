@@ -56,6 +56,7 @@ public class GameClient extends Thread {
             break;
         case LOGIN:
             packet = new Packet00Login(data);
+            System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((Packet00Login) packet).getUsername() + " has joined the world...");
             handleLogin((Packet00Login) packet, address, port);
             break;
         case DISCONNECT:

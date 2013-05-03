@@ -3,16 +3,16 @@ package ip.h2n0.main.GFX.menu;
 import ip.h2n0.main.GFX.Colours;
 import ip.h2n0.main.GFX.Font;
 import ip.h2n0.main.GFX.Screen;
-import ip.h2n0.main.entities.Player;
+import ip.h2n0.main.entities.player;
 
 public class PauseMenu extends Menu {
 
-    private Player player;
+    private player player;
     private int animTime = 0;
     private int colour;
 
 
-    public PauseMenu(Player player) {
+    public PauseMenu(player player) {
         super();
         this.player = player;
     }

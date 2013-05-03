@@ -62,10 +62,10 @@ public class MultiTypeMenu extends Menu {
                 int d = 0;
                 if(tick % 45 <= 23) d = 5;
                 colour = 555;
-                Font.render(msg, screen, 20 - msg.length(), 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333));
+                Font.render(msg, screen, 20, 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333));
                 renderCursor(screen , 120 + d,41 + (20 * i));
             }
-            Font.render(msg, screen, 20 - msg.length(), 40 + (20 * i), Colours.get(-1, -1, -1, colour));
+            Font.render(msg, screen, 20 ,40 + (20 * i), Colours.get(-1, -1, -1, colour));
         }
     }
 }

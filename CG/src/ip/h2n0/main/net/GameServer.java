@@ -1,11 +1,12 @@
 package ip.h2n0.main.net;
 
 import ip.h2n0.main.Game;
+import ip.h2n0.main.GFX.menu.TitleMenu;
 import ip.h2n0.main.entities.PlayerMP;
 import ip.h2n0.main.net.packets.Packet;
+import ip.h2n0.main.net.packets.Packet.PacketTypes;
 import ip.h2n0.main.net.packets.Packet00Login;
 import ip.h2n0.main.net.packets.Packet01Disconnect;
-import ip.h2n0.main.net.packets.Packet.PacketTypes;
 import ip.h2n0.main.net.packets.Packet02Move;
 
 import java.io.IOException;
@@ -55,12 +56,12 @@ public class GameServer extends Thread {
         case LOGIN:
             packet = new Packet00Login(data);
             System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((Packet00Login) packet).getUsername() + " has connected...");
-            PlayerMP player = new PlayerMP(game,game.level, 100, 100, ((Packet00Login) packet).getUsername(), address, port);
+            PlayerMP player = new PlayerMP(game, game.level, 100, 100, ((Packet00Login) packet).getUsername(), address, port);
             this.addConnection(player, (Packet00Login) packet);
             break;
         case DISCONNECT:
             packet = new Packet01Disconnect(data);
-            System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((Packet01Disconnect) packet).getUsername() + " has left...");
+            System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((Packet01Disconnect) packet).getUsername() + " has diconnected...");
             this.removeConnection((Packet01Disconnect) packet);
             break;
         case MOVE:
@@ -74,7 +75,7 @@ public class GameServer extends Thread {
     public void addConnection(PlayerMP player, Packet00Login packet) {
         boolean alreadyConnected = false;
         for (PlayerMP p : this.connectedPlayers) {
-            if (player.getUsername().equalsIgnoreCase(p.getUsername())) {
+            if (player.getUsername().equalsIgnoreCase(player.getUsername())) {
                 if (p.ipAddress == null) {
                     p.ipAddress = player.ipAddress;
                 }
@@ -89,12 +90,15 @@ public class GameServer extends Thread {
 
                 // relay to the new player that the currently connect player
                 // exists
-                packet = new Packet00Login(p.getUsername(), p.x, p.y);
+                packet = new Packet00Login(player.getUsername(), p.x, p.y);
                 sendData(packet.getData(), player.ipAddress, player.port);
             }
         }
         if (!alreadyConnected) {
             this.connectedPlayers.add(player);
+        } else {
+            System.out.println("A player already has that username sorry...");
+            game.setMenu(new TitleMenu());
         }
     }
 

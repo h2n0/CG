@@ -1,6 +1,5 @@
 package ip.h2n0.main.GFX;
 
-
 public class Font {
 
     private static String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ      " + "abcdefghijklmnopqrstuvwxyz      " + "0123456789.,!?'\"-+=/\\%()<>:;_   ";
@@ -14,12 +13,33 @@ public class Font {
         }
     }
 
+    public static void render(String msg, Screen screen, int x, int y) {
+        msg = msg.toUpperCase();
+        for (int i = 0; i < msg.length(); i++) {
+            int charIndex = chars.indexOf(msg.charAt(i));
+            if (charIndex >= 0)
+                screen.render(x + (i * 8) - msg.length(), y, charIndex + 29 * 32, Colours.get(-1, -1, -1, 555), 0x00, 1);
+        }
+    }
+
+    /*
+     * public static void renderFromFile(String file, Screen screen, int x, int
+     * y, int colour) { List<String> lines = new ArrayList<String>(); String
+     * line = ""; BufferedReader br = new BufferedReader(new
+     * InputStreamReader(Font.class.getResourceAsStream("/text-files/" + file +
+     * ".txt"))); try { while ((line = br.readLine()) != null) { line =
+     * line.toUpperCase(); lines.add(line); } br.close(); } catch (IOException
+     * e) { e.printStackTrace(); } for (int i = 0; i < lines.size(); i++) { int
+     * charIndex = chars.indexOf(lines.get(i)); if (charIndex >= 0)
+     * render(lines.get(i)); } }
+     */
+
     public static void renderScale(String msg, Screen screen, int x, int y, int scale, int colour) {
         msg = msg.toUpperCase();
         for (int i = 0; i < msg.length(); i++) {
             int charIndex = chars.indexOf(msg.charAt(i));
             if (charIndex >= 0)
-                screen.render(x + (i * 8), y, charIndex + 29 * 32, colour, 0x00, scale);
+                screen.render(x + (i * (8 * scale)) - msg.length(), y, charIndex + 29 * 32, colour, 0x00, scale);
         }
     }
 

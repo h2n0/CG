@@ -5,7 +5,7 @@ import ip.h2n0.main.GFX.SpriteSheet;
 import ip.h2n0.main.GFX.menu.IntroMenu;
 import ip.h2n0.main.GFX.menu.Menu;
 import ip.h2n0.main.Level.Level;
-import ip.h2n0.main.entities.Player;
+import ip.h2n0.main.entities.player;
 import ip.h2n0.main.entities.PlayerMP;
 import ip.h2n0.main.net.GameClient;
 import ip.h2n0.main.net.GameServer;
@@ -27,7 +27,7 @@ public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 280;
     public static final int HEIGHT = 150;
     public static final int SCALE = 3;
-    public static final String NAME = "CG";
+    public static final String NAME = "Insert RPG Here";
     public static String VERSION = "V0.6.3_1";
     public static final Dimension DIMENSIONS = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
     public JFrame frame;
@@ -49,7 +49,7 @@ public class Game extends Canvas implements Runnable {
     public WindowHandler windowHandler;
     public Level level;
     public Menu menu;
-    public Player player;
+    public player player;
 
     public GameClient socketClient;
     public GameServer socketServer;
@@ -78,15 +78,8 @@ public class Game extends Canvas implements Runnable {
         screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/art/SpriteSheet.png"));
         input = new InputHandler(this);
         level = new Level("/art/levels/FB-Test.png");
-        // level = new Level();
         player = new PlayerMP(this, level, 100, 100, input, JOptionPane.showInputDialog(this, "Please enter a username"), null, -1);
         level.addEntity(player);
-        if (!isApplet) {
-            Packet00Login loginPacket = new Packet00Login(player.getUsername(), player.x, player.y);
-            if (socketServer != null) {
-                socketServer.addConnection((PlayerMP) player, loginPacket);
-            }
-        }
     }
 
     public void startServer() {
@@ -94,28 +87,30 @@ public class Game extends Canvas implements Runnable {
         socketServer.start();
         socketClient = new GameClient(this, "localhost");
         socketClient.start();
+        Packet00Login loginPacket = new Packet00Login(player.getUsername(), player.x, player.y);
+        if (socketServer != null) {
+            socketServer.addConnection((PlayerMP) player, loginPacket);
+        }
+        loginPacket.writeData(socketClient);
     }
 
     public void join() {
-        socketClient = new GameClient(this, JOptionPane.showInputDialog(this, "IP to join: "));
+        socketClient = new GameClient(this, "localhost");
         socketClient.start();
+        Packet00Login loginPacket = new Packet00Login(player.getUsername(), player.x, player.y);
+        if (socketServer != null) {
+            socketServer.addConnection((PlayerMP) player, loginPacket);
+        }
+        loginPacket.writeData(socketClient);
     }
 
-    public void start() {
+    public synchronized void start() {
         running = true;
         thread = new Thread(this, NAME + "_Game");
-        if (!isApplet) {
-            if (JOptionPane.showConfirmDialog(this, "Do you want to run the server") == 0) {
-                socketServer = new GameServer(this);
-                socketServer.start();
-            }
-            socketClient = new GameClient(this, JOptionPane.showInputDialog(this, "IP :"));
-            socketClient.start();
-        }
         thread.start();
     }
 
-    public void stop() {
+    public synchronized void stop() {
         if (running = false)
             return;
         running = false;

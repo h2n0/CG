@@ -6,9 +6,6 @@ import ip.h2n0.main.GFX.Screen;
 
 public class GameTypeMenu extends Menu {
 
-    private int d = 0;
-    private int m = 0;
-
     public GameTypeMenu(Menu parent) {
         super();
         this.parent = parent;
@@ -40,32 +37,35 @@ public class GameTypeMenu extends Menu {
             if (selected == 0 && selectTime == 0) {
                 game.setMenu(null);
             } else if (selected == 1 && selectTime == 0) {
-                game.setMenu(new MultiTypeMenu(this));
+                if (!game.isApplet) {
+                    game.setMenu(new MultiTypeMenu(this));
+                }
             }
         }
         if (input.esc.isPressed()) {
             game.setMenu(parent);
         }
-        m++;
+        tick++;
     }
 
     @Override
     public void render(Screen screen) {
         screen.set(0);
-        if (m % 45 <= 23) {
-            d = 0;
-        } else {
+        int d = 0;
+        if (tick % 45 <= 23)
             d = 5;
-        }
         for (int i = 0; i < options.length; i++) {
             colour = 222;
             String msg = options[i];
             if (i == selected) {
                 colour = 555;
-                Font.render(msg, screen, 20 - msg.length(), 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333));
+                Font.render(msg, screen, 10, 41 + (20 * i), Colours.get(-1, -1, -1, colour - 333));
                 renderCursor(screen, 120 + d, 41 + (20 * i));
             }
-            Font.render(msg, screen, 20 - msg.length(), 40 + (20 * i), Colours.get(-1, -1, -1, colour));
+            if (selected == 1 && game.isApplet) {
+                colour = 500;
+            }
+            Font.render(msg, screen, 10, 40 + (20 * i), Colours.get(-1, -1, -1, colour));
         }
     }
 }

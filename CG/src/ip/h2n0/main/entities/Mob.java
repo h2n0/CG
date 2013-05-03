@@ -70,7 +70,7 @@ public abstract class Mob extends Entity {
         return false;
     }
 
-    public void doHurt(int dmg, int dir) {
+    public void doHurt(int dmg,int dir) {
         level.addEntity(new TextParticle("" + dmg, x, y, Colours.get(-1, -1, -1, 555)));
     }
 

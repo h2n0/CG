@@ -6,7 +6,7 @@ import ip.h2n0.main.Level.Level;
 
 import java.net.InetAddress;
 
-public class PlayerMP extends Player {
+public class PlayerMP extends player {
 
     public InetAddress ipAddress;
     public int port;
@@ -21,10 +21,5 @@ public class PlayerMP extends Player {
         super(game, level, x, y, null, username);
         this.ipAddress = ipAddress;
         this.port = port;
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
     }
 }

@@ -67,6 +67,13 @@ public abstract class Menu {
         }
     }
     
+    
+    /**
+     * Call if you want to render a cursor
+     * @param screen
+     * @param x
+     * @param y
+     */
     public void renderCursor(Screen screen , int x , int y){
         screen.render(x, y, 27 + 0 * 32, Colours.get(-1, 222, 444, 555), 0, 1);
     }

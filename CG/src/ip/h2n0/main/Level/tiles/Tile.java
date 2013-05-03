@@ -16,7 +16,7 @@ public abstract class Tile {
     public static final Tile Lava = new LavaTile(4, new int[][] { { 0, 5 }, { 1, 5 }, { 2, 5 }, { 1, 5 } }, Colours.get(-1, 530, 400, -1), 0xFFFF5933, 1250);
     public static final Tile FarmLand = new FarmTile(5, 3, 1, Colours.get(210, 310, 555, 111), 0xFFA54200, 100);
 
-    protected byte id;
+    public byte id;
     protected boolean solid;
     protected boolean emitter;
     private int levelColour;

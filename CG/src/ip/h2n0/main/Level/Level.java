@@ -18,18 +18,19 @@ public class Level {
     private byte[] tiles;
     public int width;
     public int height;
-    public List<Entity> entities = new ArrayList<Entity>();
+    private List<Entity> entitys = new ArrayList<Entity>();
     private String imagePath;
     private BufferedImage image;
 
     public Level(String imagePath) {
-        if (imagePath != null) {
+        if (imagePath != "") {
             this.imagePath = imagePath;
             this.loadLevelFromFile();
         } else {
             this.width = 64;
             this.height = 64;
             tiles = new byte[width * height];
+            LevelGen.generateLevel(width, height, tiles, 4);
         }
     }
 
@@ -59,8 +60,7 @@ public class Level {
         }
     }
 
-    @SuppressWarnings("unused")
-    private void saveLevelToFile() {
+    public void saveLevelToFile() {
         try {
             ImageIO.write(image, "png", new File(Level.class.getResource(this.imagePath).getFile()));
         } catch (IOException e) {
@@ -73,24 +73,13 @@ public class Level {
         image.setRGB(x, y, newTile.getLevelColour());
     }
 
-    public void generateLevel() {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (x * y % 10 < 7) {
-                    tiles[x + y * width] = Tile.Grass.getId();
-                } else {
-                    tiles[x + y * width] = Tile.Stone.getId();
-                }
-            }
-        }
-    }
-
     public synchronized List<Entity> getEntities() {
-        return entities;
+        return this.entitys;
     }
 
     public void tick() {
-        for (Entity e : getEntities()) {
+        for (int i = 0; i < entitys.size(); i++) {
+            Entity e = entitys.get(i);
             e.tick();
         }
 
@@ -122,10 +111,9 @@ public class Level {
     }
 
     public void renderEntities(Screen screen) {
-        for (Entity e : getEntities()) {
-            if (!e.removed) {
-                e.render(screen);
-            }
+        for (int i = 0; i < entitys.size(); i++) {
+            Entity e = entitys.get(i);
+            e.render(screen);
         }
     }
 
@@ -135,17 +123,11 @@ public class Level {
         return Tile.tiles[tiles[x + y * width]];
     }
 
-    public void addEntity(Entity entity) {
-        entity.removed = false;
-        getEntities().add(entity);
+    public synchronized void addEntity(Entity entity) {
+        this.getEntities().add(entity);
     }
 
-    public void removeEntity(Entity entity) {
-        entity.removed = true;
-        getEntities().remove(entity);
-    }
-
-    public void removePlayerMP(String username) {
+    public synchronized void removePlayerMP(String username) {
         int index = 0;
         for (Entity e : getEntities()) {
             if (e instanceof PlayerMP && ((PlayerMP) e).getUsername().equals(username)) {
@@ -153,7 +135,7 @@ public class Level {
             }
             index++;
         }
-        getEntities().remove(index);
+        this.getEntities().remove(index);
     }
 
     private int getPlayerMPIndex(String username) {

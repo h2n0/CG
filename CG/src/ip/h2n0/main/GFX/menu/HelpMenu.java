@@ -21,7 +21,7 @@ public class HelpMenu extends Menu {
             helpTime--;
         }
         if (helpPage == 0) {
-            options = new String[] { "Welcome to CG", "", "not much to see here", "but press \"A\"/\"D\" or the", "\"Left\"/\"right\"keys on the keyboard", "to change the page" };
+            options = new String[] { "Welcome to CG", "", "not much to see here", "but press \"A\"/\"D\" or the", "Left/right keys on the keyboard", "to change the page" };
         } else if (helpPage == 1) {
             options = new String[] { "How to play!", "", "W - Move up", "A - Move left", "S - Move Down", "D - Move right" };
         } else if (helpPage == 2) {
@@ -63,10 +63,7 @@ public class HelpMenu extends Menu {
             } else {
                 colour = 333;
             }
-            Font.render(msg, screen, 5, (10 * i) + 40, Colours.get(-1, -1, -1, colour));
-        }
-        if(helpPage == 0){
-        screen.render(120, 41, 28 + 0 * 32, Colours.get(-1, 231, 004, 550), 0, 2);
+            Font.render(msg, screen, 15, (10 * i) + 40, Colours.get(-1, -1, -1, colour));
         }
         Font.render("(" + (helpPage + 1) + "/" + finalPage + ")", screen, 10, 150, Colours.get(-1, -1, -1, 444));
         Font.render("Press \"ESC\" to go back", screen, 10, 160, Colours.get(-1, -1, -1, 111));
