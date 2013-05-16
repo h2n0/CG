@@ -1,6 +1,5 @@
 package ip.h2n0.main.entities;
 
-import ip.h2n0.main.GFX.Colours;
 import ip.h2n0.main.Level.tiles.Tile;
 import ip.h2n0.main.entities.particles.TextParticle;
 
@@ -13,6 +12,12 @@ public abstract class Mob extends Entity {
     protected int movingDir = 1;
     protected int scale = 1;
     public int tickTime = 0;
+    protected int stamina;
+    public int attackDir = 0;
+    protected int maxHealth = 10;
+    protected int health = 10;
+    protected int hurtTime = 0;
+    protected int swimTimer = 0;
 
     public Mob(String name, int x, int y, int speed) {
         this.name = name;
@@ -23,6 +28,16 @@ public abstract class Mob extends Entity {
 
     @Override
     public void tick() {
+        tickTime++;
+        if (health <= 0) {
+            die();
+        }
+        if (hurtTime > 0) {
+            hurtTime--;
+        }
+        if (onLava()) {
+            hurt(Tile.Lava, dir, 8);
+        }
     }
 
     public void move(int xa, int ya) {
@@ -47,14 +62,18 @@ public abstract class Mob extends Entity {
         }
     }
 
+    protected void die() {
+        remove();
+    }
+
     public abstract boolean hasCollided(int xa, int ya);
 
     public void hurt(Mob mob, int damage, int attackDir) {
         doHurt(damage, attackDir);
     }
 
-    public void hurt(Tile tile, int x, int y, int dmg) {
-        int attackDir = dir ^ 1;
+    public void hurt(Tile tile, int dir, int dmg) {
+        attackDir = dir ^ 1;
         doHurt(dmg, attackDir);
     }
 
@@ -70,8 +89,10 @@ public abstract class Mob extends Entity {
         return false;
     }
 
-    public void doHurt(int dmg,int dir) {
-        level.addEntity(new TextParticle("" + dmg, x, y, Colours.get(-1, -1, -1, 555)));
+    public void doHurt(int dmg, int dir) {
+        if (hurtTime > 0) return;
+        level.addEntity(new TextParticle("" + dmg, x, y, 500));
+        hurtTime = 10;
     }
 
     protected boolean isSwimming() {

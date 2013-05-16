@@ -3,7 +3,7 @@ package ip.h2n0.main.GFX.menu;
 import ip.h2n0.main.GFX.Colours;
 import ip.h2n0.main.GFX.Font;
 import ip.h2n0.main.GFX.Screen;
-import ip.h2n0.main.entities.player;
+import ip.h2n0.main.entities.Player;
 
 public class TitleMenu extends Menu {
 
@@ -31,7 +31,7 @@ public class TitleMenu extends Menu {
             if (selectTime == 0 && waitTime == 0) {
                 switch (selected) {
                 case 0:
-                    game.setMenu(new GameTypeMenu(this));
+                    game.setMenu(null);
                     break;
                 case 1:
                     game.setMenu(new HelpMenu(this));
@@ -69,7 +69,7 @@ public class TitleMenu extends Menu {
             Font.render(msg, screen, 20 - msg.length(), 40 + (20 * i), Colours.get(-1, -1, -1, colour));
             Font.render("Arrow keys and W A S D to move", screen, 20, 160, Colours.get(-1, -1, -1, 111));
             Font.render("Welcome back!", screen, 150, 50);
-            Font.render(player.getUsernameO(), screen, 150, 60, Colours.get(-1, -1, -1, 222));
+            Font.render(Player.getUsernameO(), screen, 150, 60, Colours.get(-1, -1, -1, 222));
         }
     }
 }

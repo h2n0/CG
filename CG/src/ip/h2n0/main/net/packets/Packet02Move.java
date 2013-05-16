@@ -21,7 +21,6 @@ public class Packet02Move extends Packet {
         this.numSteps = Integer.parseInt(dataArray[3]);
         this.isMoving = Integer.parseInt(dataArray[4]) == 1;
         this.movingDir = Integer.parseInt(dataArray[5]);
-
     }
 
     public Packet02Move(String username, int x, int y, int numSteps, boolean isMoving, int movingDir) {
@@ -46,7 +45,9 @@ public class Packet02Move extends Packet {
 
     @Override
     public byte[] getData() {
-        return ("02" + this.username + "," + this.x + "," + this.y + "," + this.numSteps + "," + (isMoving ? 1 : 0) + "," + this.movingDir).getBytes();
+        return ("02" + this.username + "," + this.x + "," + this.y + "," + this.numSteps + "," + (isMoving ? 1 : 0)
+                + "," + this.movingDir).getBytes();
+
     }
 
     public String getUsername() {
@@ -72,5 +73,4 @@ public class Packet02Move extends Packet {
     public int getMovingDir() {
         return movingDir;
     }
-
 }

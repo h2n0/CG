@@ -6,7 +6,7 @@ import ip.h2n0.main.Level.Level;
 
 import java.net.InetAddress;
 
-public class PlayerMP extends player {
+public class PlayerMP extends Player {
 
     public InetAddress ipAddress;
     public int port;

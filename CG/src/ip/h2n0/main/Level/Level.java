@@ -81,6 +81,8 @@ public class Level {
         for (int i = 0; i < entitys.size(); i++) {
             Entity e = entitys.get(i);
             e.tick();
+            if(e.removed)
+                this.getEntities().remove(e);
         }
 
         for (Tile t : Tile.tiles) {

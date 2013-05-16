@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 /**
- * @author project ZOM
+ * @author h2n0
  *
  */
 @SuppressWarnings("serial")

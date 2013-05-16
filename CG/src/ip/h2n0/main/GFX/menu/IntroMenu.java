@@ -51,7 +51,7 @@ public class IntroMenu extends Menu {
 
                 }
             }
-            if(tick > 60 * 10){
+            if(tick > 60 * 50){
                 game.setMenu(new ExpositionMenu(this));
             }
             Font.render("Press \"Enter\"/\"Return\"to continue", screen, 10, 150, Colours.get(-1, -1, -1, colour));

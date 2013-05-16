@@ -11,7 +11,7 @@ public class TextParticle extends Particle {
     private String msg;
     private int colour;
     private int age = 0;
-    private int x1, y1, z1;
+    private double x1, y1, z1;
     private double x2, y2, z2;
 
     public Random r = new Random();
@@ -25,14 +25,14 @@ public class TextParticle extends Particle {
         y1 = y;
         z1 = 2;
         x2 = r.nextGaussian() * 0.3;
-        y2 = r.nextGaussian() * 0.5;
-        z2 = r.nextFloat() * 0.2 + 7;
+        y2 = r.nextGaussian() * 0.2;
+        z2 = r.nextFloat() * 0.7 + 2;
     }
 
     @Override
     public void tick() {
         age++;
-        if (age > lifeTime) {
+        if (age > 45) {
             remove();
         }
         x1 += x2;
@@ -41,14 +41,17 @@ public class TextParticle extends Particle {
 
         if (z1 < 0) {
             z1 = 0;
+            z2 *= -0.5;
+            x2 *= 0.6;
+            y2 *= 0.6;
         }
-
+        z2 -= 0.15;
         x = (int) x1;
         y = (int) y1;
     }
 
     public void render(Screen screen) {
-        Font.render(msg, screen, x - msg.length() * 4 + 1, y - (int) (y2), Colours.get(-1, -1, -1, 0));
-        Font.render(msg, screen, x - msg.length() * 4, y - (int) (y2), colour);
+        Font.render(msg, screen, x - msg.length() * 4 + 1, y - (int) (z1) + 1, Colours.get(-1, -1, -1, 0));
+        Font.render(msg, screen, x - msg.length() * 4, y - (int) (z1), Colours.get(-1, -1, -1, colour));
     }
 }

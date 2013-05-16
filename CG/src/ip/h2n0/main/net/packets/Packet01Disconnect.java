@@ -4,7 +4,6 @@ import ip.h2n0.main.net.GameClient;
 import ip.h2n0.main.net.GameServer;
 
 public class Packet01Disconnect extends Packet {
-
     private String username;
 
     public Packet01Disconnect(byte[] data) {

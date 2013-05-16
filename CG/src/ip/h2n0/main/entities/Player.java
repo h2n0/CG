@@ -14,7 +14,7 @@ import ip.h2n0.main.net.packets.Packet02Move;
 
 import java.util.Random;
 
-public class player extends Mob {
+public class Player extends Mob {
 
     private InputHandler input;
     private Game game;
@@ -29,42 +29,35 @@ public class player extends Mob {
     private int inputDelay = 10;
     public Item activeItem;
 
-    @SuppressWarnings("static-access")
-    public player(Game game, Level level, int x, int y, InputHandler input, String username) {
+    public Player(Game game, Level level, int x, int y, InputHandler input, String username) {
         super("Player", x, y, 1);
         this.input = input;
         this.level = level;
-        this.username = username;
+        Player.username = username;
         this.game = game;
-        this.stamina = 5;
         this.activeItem = null;
+        this.stamina = 10;
     }
 
     public void tick() {
+        super.tick();
         if (inputDelay > 0) {
             inputDelay--;
         }
         int xa = 0;
         int ya = 0;
         if (input != null) {
-            if (input.up.isPressed()) {
-                ya--;
-            }
-            if (input.down.isPressed()) {
-                ya++;
-            }
-            if (input.left.isPressed()) {
-                xa--;
-            }
-            if (input.right.isPressed()) {
-                xa++;
-            }
+            if (input.up.isPressed())ya--;
+            if (input.down.isPressed())ya++;
+            if (input.left.isPressed())xa--;
+            if (input.right.isPressed())xa++;
             if (input.esc.isPressed() && inputDelay == 0) {
                 game.setMenu(new PauseMenu(this));
                 inputDelay = 10;
             }
             if (input.enter.isPressed() && inputDelay == 0) {
-                level.alterTile(x, y, Tile.FarmLand);
+                level.alterTile(x >> 3, y >> 3, Tile.Water);
+                inputDelay = 10;
             }
             if (input.shift.isPressed() && stamina != 0) {
                 if (ticks % 60 == 59) {
@@ -80,25 +73,26 @@ public class player extends Mob {
                         stamina = 5;
                     } else {
                         stamina++;
-                        try {
-                            level.addEntity(new TextParticle("+1S", x, y, 050));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        System.out.println("+1S");
+                        level.addEntity(new TextParticle("+1S", x, y, 050));
                     }
+                }
+            }
+            if (isSwimming()) {
+                if (ticks % 60 == 59) {
+                    payStamina(1);
                 }
             }
         }
         if (xa != 0 || ya != 0) {
             move(xa, ya);
             isMoving = true;
-            if (!game.isApplet) {
-                Packet02Move packet = new Packet02Move(getUsername(), this.x, this.y, this.numSteps, this.isMoving, this.movingDir);
-                packet.writeData(Game.game.socketClient);
-            }
+            Packet02Move packet = new Packet02Move(getUsername(), this.x, this.y, this.numSteps, this.isMoving, this.movingDir);
+            packet.writeData(Game.game.socketClient);
         } else {
             isMoving = false;
+        }
+        if(removed){
+        //    game.setMenu(new GameOverMenu());
         }
         ticks++;
     }
@@ -174,6 +168,14 @@ public class player extends Mob {
             }
         }
         return false;
+    }
+
+    public boolean payStamina(int cost) {
+        if (cost > stamina) {
+            return false;
+        }
+        stamina -= cost;
+        return true;
     }
 
     public String getUsername() {
